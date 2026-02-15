@@ -112,7 +112,9 @@ const TimelineItem = ({ data, index }) => {
                 {data.media && (
                     <div className={styles.mediaContainer}>
                         {data.media.type === "image" ? (
-                            <div className={styles.mediaPlaceholder}>[Image: {data.media.src}]</div>
+                            <div className={styles.imageWrapper}>
+                                <img src={data.media.src} alt={data.title} className={styles.mediaImage} />
+                            </div>
                         ) : data.media.source === "youtube" ? (
                             <div className={styles.videoWrapper}>
                                 <iframe
@@ -124,7 +126,12 @@ const TimelineItem = ({ data, index }) => {
                                 ></iframe>
                             </div>
                         ) : (
-                            <div className={styles.mediaPlaceholder}>[Video: {data.media.src}]</div>
+                            <div className={styles.videoWrapper}>
+                                <video controls className={styles.localVideo} preload="metadata">
+                                    <source src={data.media.src} type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
                         )}
                     </div>
                 )}
