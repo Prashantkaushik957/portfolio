@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import styles from "./Projects.module.css";
+import SpotlightCard from "./SpotlightCard";
 import Link from "next/link";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 
@@ -43,13 +44,9 @@ const Projects = () => {
 
             <div className={styles.grid}>
                 {projectsData.map((project, index) => (
-                    <motion.div
+                    <SpotlightCard
                         key={index}
                         className={styles.card}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        viewport={{ once: true }}
                     >
                         <div className={styles.imagePlaceholder}>
                             {/* Project Screenshot Placeholder */}
@@ -75,7 +72,7 @@ const Projects = () => {
                                 </Link>
                             </div>
                         </div>
-                    </motion.div>
+                    </SpotlightCard>
                 ))}
             </div>
         </section>

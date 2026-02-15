@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import styles from "./Timeline.module.css";
 import Image from "next/image";
 
@@ -15,7 +16,8 @@ const timelineData = [
         year: "DTU Journey",
         title: "Emcee DTU - Inaugural Ceremony of Yuvaan",
         description: "Selected as the first recruit to host a major stage event, the inaugural ceremony of Yuvaan, the film and literature fest of DTU.",
-        category: "Hosting"
+        category: "Hosting",
+        media: { type: "image", src: "/placeholder/yuvaan.jpg" } // Example media
     },
     {
         year: "Academics",
@@ -27,7 +29,8 @@ const timelineData = [
         year: "Volunteering",
         title: "Desh K Mentor Conclave",
         description: "Felicitated by the Hon'ble Education Minister of Delhi for excellence in volunteering. Received 2 awards: Volunteering & Panelist.",
-        category: "Volunteering"
+        category: "Volunteering",
+        media: { type: "image", src: "/placeholder/award.jpg" }
     },
     {
         year: "Hosting",
@@ -39,7 +42,8 @@ const timelineData = [
         year: "Management",
         title: "Invictus - Official Tech Fest",
         description: "Managed PR for Invictus. Created a reel with over 100k views, driving significant engagement.",
-        category: "Management"
+        category: "Management",
+        media: { type: "video", src: "https://www.youtube.com/embed/dQw4w9WgXcQ" } // Example embed or local video
     },
     {
         year: "2024",
@@ -97,13 +101,25 @@ const TimelineItem = ({ data, index }) => {
             className={`${styles.item} ${index % 2 === 0 ? styles.left : styles.right}`}
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            viewport={{ once: true, margin: "-100px" }}
         >
             <div className={styles.content}>
                 <span className={styles.year}>{data.year}</span>
                 <h3 className={styles.title}>{data.title}</h3>
                 <p className={styles.description}>{data.description}</p>
+
+                {data.media && (
+                    <div className={styles.mediaContainer}>
+                        {data.media.type === "image" ? (
+                            // For now using a placeholder div with text since we don't have real images yet
+                            <div className={styles.mediaPlaceholder}>[Image: {data.media.src}]</div>
+                        ) : (
+                            <div className={styles.mediaPlaceholder}>[Video: {data.media.src}]</div>
+                        )}
+                    </div>
+                )}
+
                 <span className={styles.category}>{data.category}</span>
             </div>
             <div className={styles.dot}></div>
@@ -112,8 +128,16 @@ const TimelineItem = ({ data, index }) => {
 };
 
 const Timeline = () => {
+    const ref = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start end", "end start"]
+    });
+
+    const height = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
     return (
-        <section id="timeline" className={styles.timelineSection}>
+        <section ref={ref} id="timeline" className={styles.timelineSection}>
             <motion.h2
                 className={styles.heading}
                 initial={{ opacity: 0 }}
@@ -122,9 +146,16 @@ const Timeline = () => {
             >
                 My Journey
             </motion.h2>
+
             <div className={styles.timeline}>
-                {/* Central Line */}
-                <div className={styles.line}></div>
+                {/* Static background line */}
+                <div className={styles.bgLine}></div>
+
+                {/* Animated fill line */}
+                <motion.div
+                    className={styles.line}
+                    style={{ height }}
+                ></motion.div>
 
                 {timelineData.map((item, index) => (
                     <TimelineItem key={index} data={item} index={index} />

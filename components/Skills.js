@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import styles from "./Skills.module.css";
+import SpotlightCard from "./SpotlightCard";
 import { FaCode, FaMicrophone, FaBrain, FaCalculator } from "react-icons/fa";
 
 const skillsData = [
@@ -41,13 +42,9 @@ const Skills = () => {
 
             <div className={styles.grid}>
                 {skillsData.map((category, index) => (
-                    <motion.div
+                    <SpotlightCard
                         key={index}
                         className={styles.card}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        viewport={{ once: true }}
                     >
                         <div className={styles.iconWrapper}>
                             {category.icon}
@@ -58,7 +55,7 @@ const Skills = () => {
                                 <li key={i} className={styles.skillItem}>{skill}</li>
                             ))}
                         </ul>
-                    </motion.div>
+                    </SpotlightCard>
                 ))}
             </div>
         </section>
