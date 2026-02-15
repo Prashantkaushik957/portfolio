@@ -43,7 +43,7 @@ const timelineData = [
         title: "Invictus - Official Tech Fest",
         description: "Managed PR for Invictus. Created a reel with over 100k views, driving significant engagement.",
         category: "Management",
-        media: { type: "video", src: "https://www.youtube.com/embed/dQw4w9WgXcQ" } // Example embed or local video
+        media: { type: "video", source: "youtube", src: "https://www.youtube.com/embed/dQw4w9WgXcQ" } // Example embed
     },
     {
         year: "2024",
@@ -112,8 +112,17 @@ const TimelineItem = ({ data, index }) => {
                 {data.media && (
                     <div className={styles.mediaContainer}>
                         {data.media.type === "image" ? (
-                            // For now using a placeholder div with text since we don't have real images yet
                             <div className={styles.mediaPlaceholder}>[Image: {data.media.src}]</div>
+                        ) : data.media.source === "youtube" ? (
+                            <div className={styles.videoWrapper}>
+                                <iframe
+                                    src={data.media.src}
+                                    title={data.title}
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
+                            </div>
                         ) : (
                             <div className={styles.mediaPlaceholder}>[Video: {data.media.src}]</div>
                         )}
